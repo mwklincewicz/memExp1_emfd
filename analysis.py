@@ -72,6 +72,18 @@ for index, text in exp1_df.iterrows():
 
         exp1_df.loc[index, 'allText'] = exp1_df.loc[index, 'allText'] + " " + exp1_df.loc[index, 'recentEvent_en']
 
+    if (exp1_df.notnull().loc[index, 'Q22']):
+        # translate to both English and Dutch (if original in English)
+        exp1_df.loc[index, 'recentEvent_en'] = my_translator.translate(exp1_df['Q22'][index])
+        exp1_df.loc[index, 'recentEvent'] = my_nl_translator.translate(exp1_df['Q22'][index])
+        # get sentiment for both English and Dutch into new columns
+        sentiment_dict = sentimentAnalysisVader.polarity_scores(exp1_df['recentEvent_en'][index])
+        exp1_df.loc[index, 'recentEvent_en_NEG'] = sentiment_dict['neg'] * 100
+        exp1_df.loc[index, 'recentEvent_en_POS'] = sentiment_dict['pos'] * 100
+        exp1_df.loc[index, 'recentEvent_en_NEU'] = sentiment_dict['neu'] * 100
+        exp1_df.loc[index, 'recentEvent_en_COM'] = sentiment_dict['compound'] * 100
+
+        exp1_df.loc[index, 'allText'] = exp1_df.loc[index, 'allText'] + " " + exp1_df.loc[index, 'recentEvent_en']
 
     if ( exp1_df.notnull().loc[index, 'abortion'] ):
         #translate to both English and Dutch (if original in English)
