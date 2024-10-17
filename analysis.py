@@ -1,16 +1,16 @@
-import numpy as np
 import spacy
+#has to be spacy 3.4
+#typing-extensions has to be 4.4
 print("spaCy version:", spacy.__version__)
-import nltk
-from nltk.tokenize import RegexpTokenizer
-from nltk.corpus import stopwords
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from deep_translator import GoogleTranslator
 import pandas as pd
+#has to be pandas 1.5.3
+#also install scikit-learn 1.3
+#also install openpyxl
 print("pandas version:", pd.__version__)
-import seaborn as sns
-from matplotlib import pyplot as plt
-from emfdscore.scoring import score_docs
+from emfdscore.scoring import score_docs as emfd_score_docs
+from emacscore.scoring import score_docs as emac_score_docs
 
 pd.set_option('display.width', 400)
 pd.set_option('display.max_columns', 100)
@@ -251,7 +251,9 @@ for index, text in exp1_df.iterrows():
     tempDf.to_csv('emfdTemp.csv', index=False, header=False)
     tempDf = pd.read_csv('emfdTemp.csv', header=None)
     length = len( tempDf )
-    eMFD_df = score_docs(tempDf, 'emfd', 'single', 'bow', 'vice-virtue', length)
+    eMFD_df = emfd_score_docs(tempDf, 'emfd', 'single', 'bow', 'vice-virtue', length)
+    eMAC_df = emac_score_docs(tempDf, 'emac', 'single', 'bow', 'vice-virtue', length)
+
     exp1_df.loc[index, 'care.virtue'] = eMFD_df['care.virtue'].values[0]
     exp1_df.loc[index, 'fairness.virtue'] = eMFD_df['fairness.virtue'].values[0]
     exp1_df.loc[index, 'loyalty.virtue'] = eMFD_df['loyalty.virtue'].values[0]
@@ -265,5 +267,21 @@ for index, text in exp1_df.iterrows():
     exp1_df.loc[index, 'moral_nonmoral_ratio'] = eMFD_df['moral_nonmoral_ratio'].values[0]
     exp1_df.loc[index, 'f_var'] = eMFD_df['f_var'].values[0]
 
-exp1_df.to_excel( "exp1_sentimentAndMACd.xlsx")
+    exp1_df.loc[index, 'macFairness.virtue'] = eMAC_df['fairness.virtue'].values[0]
+    exp1_df.loc[index, 'macGroup.virtue'] = eMAC_df['group.virtue'].values[0]
+    exp1_df.loc[index, 'macDeference.virtue'] = eMAC_df['deference.virtue'].values[0]
+    exp1_df.loc[index, 'macHeroism.virtue'] = eMAC_df['heroism.virtue'].values[0]
+    exp1_df.loc[index, 'macReciprocity.virtue'] = eMAC_df['reciprocity.virtue'].values[0]
+    exp1_df.loc[index, 'macFamily.virtue'] = eMAC_df['family.virtue'].values[0]
+    exp1_df.loc[index, 'macProperty.virtue'] = eMAC_df['reciprocity.virtue'].values[0]
+    exp1_df.loc[index, 'macFairness.vice'] = eMAC_df['fairness.vice'].values[0]
+    exp1_df.loc[index, 'macGroup.vice'] = eMAC_df['group.vice'].values[0]
+    exp1_df.loc[index, 'macDeference.vice'] = eMAC_df['deference.vice'].values[0]
+    exp1_df.loc[index, 'macHeroism.vice'] = eMAC_df['heroism.vice'].values[0]
+    exp1_df.loc[index, 'macReciprocity.vice'] = eMAC_df['reciprocity.vice'].values[0]
+    exp1_df.loc[index, 'macFamily.vice'] = eMAC_df['family.vice'].values[0]
+    exp1_df.loc[index, 'macProperty.vice'] = eMAC_df['reciprocity.vice'].values[0]
+    exp1_df.loc[index, 'macF_var'] = eMAC_df['f_var'].values[0]
+
+exp1_df.to_excel( "exp1_sentimentMFTAndMACd.xlsx")
 #save to new excel
