@@ -28,6 +28,7 @@ my_nl_translator = GoogleTranslator(source='auto', target='nl')
 
 sentimentAnalysisVader = SentimentIntensityAnalyzer()
 for index, text in exp1_df.iterrows():
+    print(index)
     exp1_df.loc[index, 'abortion_3words_en'] = my_translator.translate(exp1_df['abortion_3words'][index])
     exp1_df.loc[index, 'LGBTQI_3words_en'] = my_translator.translate(exp1_df['LGBTQI_3words'][index])
     exp1_df.loc[index, 'terrorism_3words_en'] = my_translator.translate(exp1_df['terrorism_3words'][index])
@@ -246,14 +247,14 @@ for index, text in exp1_df.iterrows():
         exp1_df.loc[index, 'healthcare_3words_COM'] = sentiment_dict['compound'] * 100
 
         exp1_df.loc[index, 'allText'] = exp1_df.loc[index, 'allText'] + " " + exp1_df.loc[index, 'healthcare_en']
-
+# Parse with MFT dictionary and MAC dictionary
     tempDf = pd.DataFrame( [exp1_df.loc[index, 'allText']] )
     tempDf.to_csv('emfdTemp.csv', index=False, header=False)
     tempDf = pd.read_csv('emfdTemp.csv', header=None)
     length = len( tempDf )
     eMFD_df = emfd_score_docs(tempDf, 'emfd', 'single', 'bow', 'vice-virtue', length)
     eMAC_df = emac_score_docs(tempDf, 'emac', 'single', 'bow', 'vice-virtue', length)
-
+# MFT virtue-vice bow per word
     exp1_df.loc[index, 'care.virtue'] = eMFD_df['care.virtue'].values[0]
     exp1_df.loc[index, 'fairness.virtue'] = eMFD_df['fairness.virtue'].values[0]
     exp1_df.loc[index, 'loyalty.virtue'] = eMFD_df['loyalty.virtue'].values[0]
@@ -266,7 +267,7 @@ for index, text in exp1_df.iterrows():
     exp1_df.loc[index, 'sanctity.vice'] = eMFD_df['sanctity.vice'].values[0]
     exp1_df.loc[index, 'moral_nonmoral_ratio'] = eMFD_df['moral_nonmoral_ratio'].values[0]
     exp1_df.loc[index, 'f_var'] = eMFD_df['f_var'].values[0]
-
+# MAC virtue-vice bow per word
     exp1_df.loc[index, 'macFairness.virtue'] = eMAC_df['fairness.virtue'].values[0]
     exp1_df.loc[index, 'macGroup.virtue'] = eMAC_df['group.virtue'].values[0]
     exp1_df.loc[index, 'macDeference.virtue'] = eMAC_df['deference.virtue'].values[0]
