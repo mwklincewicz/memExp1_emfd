@@ -16,12 +16,12 @@ pd.set_option('display.width', 400)
 pd.set_option('display.max_columns', 100)
 pd.set_option('display.max_rows', 400)
 
-#exp1_df = pd.read_excel("./test.xlsx")
+exp1_df = pd.read_excel("./test.xlsx")
 
 expA_df = pd.read_excel("./rawdata_exp1.xlsx")
 expB_df = pd.read_excel("./rawdata_exp2.xlsx")
 
-exp1_df = pd.merge(expA_df, expB_df, how="outer")
+#exp1_df = pd.merge(expA_df, expB_df, how="outer")
 
 my_translator = GoogleTranslator(source='auto', target='en')
 my_nl_translator = GoogleTranslator(source='auto', target='nl')
