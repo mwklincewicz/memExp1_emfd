@@ -16,12 +16,12 @@ pd.set_option('display.width', 400)
 pd.set_option('display.max_columns', 100)
 pd.set_option('display.max_rows', 400)
 
-exp1_df = pd.read_excel("./test.xlsx")
+#exp1_df = pd.read_excel("./test.xlsx")
 
 expA_df = pd.read_excel("./rawdata_exp1.xlsx")
 expB_df = pd.read_excel("./rawdata_exp2.xlsx")
 
-#exp1_df = pd.merge(expA_df, expB_df, how="outer")
+exp1_df = pd.merge(expA_df, expB_df, how="outer")
 
 my_translator = GoogleTranslator(source='auto', target='en')
 my_nl_translator = GoogleTranslator(source='auto', target='nl')
@@ -254,6 +254,8 @@ for index, text in exp1_df.iterrows():
     length = len( tempDf )
     eMFD_df = emfd_score_docs(tempDf, 'emfd', 'single', 'bow', 'vice-virtue', length)
     eMAC_df = emac_score_docs(tempDf, 'emac', 'single', 'bow', 'vice-virtue', length)
+    eMFD_df_all = emfd_score_docs(tempDf, 'emfd', 'all', 'bow', 'vice-virtue', length)
+    eMAC_df_all = emac_score_docs(tempDf, 'emac', 'all', 'bow', 'vice-virtue', length)
 # MFT virtue-vice bow per word
     exp1_df.loc[index, 'care.virtue'] = eMFD_df['care.virtue'].values[0]
     exp1_df.loc[index, 'fairness.virtue'] = eMFD_df['fairness.virtue'].values[0]
@@ -283,6 +285,35 @@ for index, text in exp1_df.iterrows():
     exp1_df.loc[index, 'macFamily.vice'] = eMAC_df['family.vice'].values[0]
     exp1_df.loc[index, 'macProperty.vice'] = eMAC_df['reciprocity.vice'].values[0]
     exp1_df.loc[index, 'macF_var'] = eMAC_df['f_var'].values[0]
+# MFT virtue-vice bow all
+    exp1_df.loc[index, 'care.virtueAll'] = eMFD_df_all['care.virtue'].values[0]
+    exp1_df.loc[index, 'fairness.virtueAll'] = eMFD_df_all['fairness.virtue'].values[0]
+    exp1_df.loc[index, 'loyalty.virtueAll'] = eMFD_df_all['loyalty.virtue'].values[0]
+    exp1_df.loc[index, 'authority.virtueAll'] = eMFD_df_all['authority.virtue'].values[0]
+    exp1_df.loc[index, 'sanctity.virtueAll'] = eMFD_df_all['sanctity.virtue'].values[0]
+    exp1_df.loc[index, 'care.viceAll'] = eMFD_df_all['care.vice'].values[0]
+    exp1_df.loc[index, 'fairness.viceAll'] = eMFD_df_all['fairness.vice'].values[0]
+    exp1_df.loc[index, 'loyalty.viceAll'] = eMFD_df_all['loyalty.vice'].values[0]
+    exp1_df.loc[index, 'authority.viceAll'] = eMFD_df_all['authority.vice'].values[0]
+    exp1_df.loc[index, 'sanctity.viceAll'] = eMFD_df_all['sanctity.vice'].values[0]
+    exp1_df.loc[index, 'moral_nonmoral_ratioAll'] = eMFD_df_all['moral_nonmoral_ratio'].values[0]
+    exp1_df.loc[index, 'f_varAll'] = eMFD_df_all['f_var'].values[0]
+# MAC virtue-vice bow all
+    exp1_df.loc[index, 'macFairness.virtueAll'] = eMAC_df_all['fairness.virtue'].values[0]
+    exp1_df.loc[index, 'macGroup.virtueAll'] = eMAC_df_all['group.virtue'].values[0]
+    exp1_df.loc[index, 'macDeference.virtueAll'] = eMAC_df_all['deference.virtue'].values[0]
+    exp1_df.loc[index, 'macHeroism.virtueAll'] = eMAC_df_all['heroism.virtue'].values[0]
+    exp1_df.loc[index, 'macReciprocity.virtueAll'] = eMAC_df_all['reciprocity.virtue'].values[0]
+    exp1_df.loc[index, 'macFamily.virtueAll'] = eMAC_df_all['family.virtue'].values[0]
+    exp1_df.loc[index, 'macProperty.virtueAll'] = eMAC_df_all['reciprocity.virtue'].values[0]
+    exp1_df.loc[index, 'macFairness.viceAll'] = eMAC_df_all['fairness.vice'].values[0]
+    exp1_df.loc[index, 'macGroup.viceAll'] = eMAC_df_all['group.vice'].values[0]
+    exp1_df.loc[index, 'macDeference.viceAll'] = eMAC_df_all['deference.vice'].values[0]
+    exp1_df.loc[index, 'macHeroism.viceAll'] = eMAC_df_all['heroism.vice'].values[0]
+    exp1_df.loc[index, 'macReciprocity.viceAll'] = eMAC_df_all['reciprocity.vice'].values[0]
+    exp1_df.loc[index, 'macFamily.viceAll'] = eMAC_df_all['family.vice'].values[0]
+    exp1_df.loc[index, 'macProperty.viceAll'] = eMAC_df_all['reciprocity.vice'].values[0]
+    exp1_df.loc[index, 'macF_varAll'] = eMAC_df_all['f_var'].values[0]
 
 exp1_df.to_excel( "exp1_sentimentMFTAndMACd.xlsx")
 #save to new excel
